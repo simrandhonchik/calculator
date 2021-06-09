@@ -32,7 +32,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const Keypad = () => {
+const Keypad = (props) => {
   const [number, setNumber] = React.useState(0);
   const [operation, setOperation] = React.useState(0);
   const [myArray, setMyArray] = React.useState([]);
@@ -46,61 +46,77 @@ const Keypad = () => {
 
   //to check if its a number
 
-  var isNumber = function isNumber(value) {
+  let isNumber = function isNumber(value) {
     return typeof value === "number" && isFinite(value);
   };
 
   //function to process number button click , it adds the number to array
-  const numberButtonClick = (props) => {
+  const numberButtonClick = (value) => () => {
     setNumber(props);
-    console.log(props);
+    console.log("props", props);
     myArray.push(props);
-    console.log(myArray);
-    return props;
+    console.log("Array - number", myArray);
+
+    if (props.onNumberButtonClick) {
+      props.onNumberButtonClick(value);
+    }
   };
 
   //this function will be called after each number output to calculate all operations/numbers passed
   // the calculated amount will also be displayed on screen
 
-  const displayOutput = (props) => {
-    for (var i = 0; i <= myArray.length; i++) {}
-  };
+  // const displayOutput = (props) => {
+  //   for (var i = 0; i <= myArray.length; i++) {}
+  // };
 
-  const operationButtonClick = (props) => {
-    setOperation(props);
-    myArray.push(props);
-
-    switch (props) {
-      case "AC":
-        myArray.length = 0;
-        break;
-
-      case "%":
-        if (myArray[myArray.length - 1] === isNumber) {
-          return myArray[myArray.length - 1] / 100;
-        } else return "Error";
-        break;
-
-      case "+/-":
-        if (
-          myArray[myArray.length - 1] === isNumber &&
-          myArray[myArray.length - 1] <= 0
-        ) {
-          return myArray[myArray.length - 1] * -1;
-        }
-        if (
-          myArray[myArray.length - 1] === isNumber &&
-          myArray[myArray.length - 1] >= 0
-        ) {
-          return myArray[myArray.length - 1] * -1;
-        } else return "Error";
-        break;
-
-      case "=":
-        break;
-      default:
-        return;
+  const operationButtonClick = (value) => () => {
+    const getNumber = (value) => {
+      //  const input
+    };
+    if (props.onOperationButtonClick) {
+      props.onOperationButtonClick(value);
     }
+    myArray.push(props);
+    if (props === "AC") {
+      myArray.length = 0;
+      console.log("ac should clean");
+    }
+
+    console.log("Array - operator", myArray);
+
+    // if ( === "AC") {
+    //   myArray.length = 0;
+    //   console.log("ac should clean");
+    // }
+
+    // setOperation(props);
+    // myArray.push(props);
+    //   switch (props) {
+    //     case "AC":
+    //       myArray.length = 0;
+    //       break;
+    //     case "%":
+    //       if (myArray[myArray.length - 1] === isNumber) {
+    //         return myArray[myArray.length - 1] / 100;
+    //       } else return "Error";
+    //     case "+/-":
+    //       if (
+    //         myArray[myArray.length - 1] === isNumber &&
+    //         myArray[myArray.length - 1] <= 0
+    //       ) {
+    //         return myArray[myArray.length - 1] * -1;
+    //       }
+    //       if (
+    //         myArray[myArray.length - 1] === isNumber &&
+    //         myArray[myArray.length - 1] >= 0
+    //       ) {
+    //         return myArray[myArray.length - 1] * -1;
+    //       } else return "Error";
+    //     case "=":
+    //       break;
+    //     default:
+    //       return;
+    //   }
   };
 
   return (
@@ -110,150 +126,83 @@ const Keypad = () => {
           <Button
             variant="contained"
             className={classes.topDark}
-            onClick={() => {
-              operationButtonClick("AC");
-            }}
+            value="AC"
+            onClick={operationButtonClick("AC")}
           >
             AC
           </Button>
           <Button
             variant="contained"
             className={classes.topDark}
-            onClick={() => {
-              operationButtonClick("+/-");
-            }}
+            onClick={operationButtonClick("+/-")}
           >
             +/-
           </Button>
           <Button
             variant="contained"
             className={classes.topDark}
-            onClick={() => {
-              operationButtonClick("%");
-            }}
+            onClick={operationButtonClick("%")}
           >
             %
           </Button>
           <Button
             variant="contained"
             className={classes.sideOperations}
-            onClick={() => {
-              operationButtonClick("/");
-            }}
+            onClick={operationButtonClick("/")}
           >
             &#247;
           </Button>
         </div>
         <div className={classes.buttonRow}>
-          <Button
-            variant="contained"
-            color="#bfbfbf"
-            onClick={() => {
-              numberButtonClick("7");
-            }}
-          >
+          <Button variant="contained" onClick={numberButtonClick("7")}>
             7
           </Button>
-          <Button
-            variant="contained"
-            color="#bfbfbf"
-            onClick={() => {
-              numberButtonClick("8");
-            }}
-          >
+          <Button variant="contained" onClick={numberButtonClick("8")}>
             8
           </Button>
-          <Button
-            variant="contained"
-            color="#bfbfbf"
-            onClick={() => {
-              numberButtonClick("9");
-            }}
-          >
+          <Button variant="contained" onClick={numberButtonClick("9")}>
             9
           </Button>
           <Button
             variant="contained"
+            onClick={operationButtonClick("*")}
             className={classes.sideOperations}
-            onClick={() => {
-              operationButtonClick("x");
-            }}
           >
-            x
+            &#215;
           </Button>
         </div>
         <div className={classes.buttonRow}>
-          <Button
-            variant="contained"
-            color="#bfbfbf"
-            onClick={() => {
-              numberButtonClick("4");
-            }}
-          >
+          <Button variant="contained" onClick={numberButtonClick("4")}>
             4
           </Button>
-          <Button
-            variant="contained"
-            color="#bfbfbf"
-            onClick={() => {
-              numberButtonClick("5");
-            }}
-          >
+          <Button variant="contained" onClick={numberButtonClick("5")}>
             5
           </Button>
-          <Button
-            variant="contained"
-            color="#bfbfbf"
-            onClick={() => {
-              numberButtonClick("6");
-            }}
-          >
+          <Button variant="contained" onClick={numberButtonClick("6")}>
             6
           </Button>
           <Button
             variant="contained"
+            onClick={operationButtonClick("-")}
             className={classes.sideOperations}
-            onClick={() => {
-              operationButtonClick("-");
-            }}
           >
             -
           </Button>
         </div>
         <div className={classes.buttonRow}>
-          <Button
-            variant="contained"
-            color="#bfbfbf"
-            onClick={() => {
-              numberButtonClick("1");
-            }}
-          >
+          <Button variant="contained" onClick={numberButtonClick("1")}>
             1
           </Button>
-          <Button
-            variant="contained"
-            color="#bfbfbf"
-            onClick={() => {
-              numberButtonClick("2");
-            }}
-          >
+          <Button variant="contained" onClick={numberButtonClick("2")}>
             2
           </Button>
-          <Button
-            variant="contained"
-            color="#bfbfbf"
-            onClick={() => {
-              numberButtonClick("3");
-            }}
-          >
+          <Button variant="contained" onClick={numberButtonClick("3")}>
             3
           </Button>
           <Button
             variant="contained"
+            onClick={operationButtonClick("+")}
             className={classes.sideOperations}
-            onClick={() => {
-              operationButtonClick("+");
-            }}
           >
             +
           </Button>
@@ -262,21 +211,21 @@ const Keypad = () => {
           <Button
             variant="contained"
             className={classes.zero}
-            onClick={() => {
-              numberButtonClick("0");
-            }}
+            onClick={numberButtonClick("0")}
           >
             0
           </Button>
-          <Button variant="contained" color="#bfbfbf">
+          <Button
+            variant="contained"
+            color="#bfbfbf"
+            onClick={operationButtonClick(".")}
+          >
             .
           </Button>
           <Button
             variant="contained"
             className={classes.sideOperations}
-            onClick={() => {
-              operationButtonClick("=");
-            }}
+            onClick={operationButtonClick("=")}
           >
             =
           </Button>

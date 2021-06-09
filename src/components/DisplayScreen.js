@@ -16,15 +16,18 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const DisplayScreen = (props) => {
+const DisplayScreen = ({ currentOperator, currentNumber }) => {
   const classes = useStyles();
+  console.log("display operator", currentOperator);
+  console.log("display screen number", currentNumber);
 
   return (
     <div className={classes.inputField}>
       {/* <input type="text" class
       Name={classes.inputField} value={number} />
       {number} */}
-      {props.number}
+      {currentOperator}
+      {currentNumber}
     </div>
   );
 };
