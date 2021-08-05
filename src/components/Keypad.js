@@ -29,179 +29,189 @@ const useStyles = makeStyles(() =>
       flexDirection: "column",
       alignItems: "center",
     },
+    inputField: {
+      width: "256px",
+      height: "40px",
+      border: "1px solid #616161",
+      background: "#616161",
+      borderRadius: "5px",
+      color: "white",
+      textAlign: "right",
+    },
   })
 );
 
-const Keypad = (props) => {
+ const Keypad = (props) => {
   const [number, setNumber] = React.useState(0);
-  const [operation, setOperation] = React.useState(0);
+  const [operator, setOperator] = React.useState('');
   const [myArray, setMyArray] = React.useState([]);
-  const [output, setOutput] = React.useState(0);
-
-  //   const addNumberToArray = (props) => {
-  //     arr.push(props);
-  //   };
+  const [output, setOutput] = React.useState('');
 
   const classes = useStyles();
 
+  let singleOperators = ['+/-', '%,'];
+  let doubleOperators = ['+','-','*','/'];
   //to check if its a number
 
-  let isNumber = function isNumber(value) {
-    return typeof value === "number" && isFinite(value);
-  };
+  // let isNumber = function isNumber(value) {
+  //   return typeof value === "number" && isFinite(value);
+  // };
 
   //function to process number button click , it adds the number to array
-  const numberButtonClick = (value) => () => {
+  const numberButtonClick = (props) =>  {
     setNumber(props);
     console.log("props", props);
     myArray.push(props);
-    console.log("Array - number", myArray);
-
-    if (props.onNumberButtonClick) {
-      props.onNumberButtonClick(value);
-    }
+    console.log("Array ", myArray);
+    console.log("Array last element ", myArray[myArray.length - 1]);
   };
 
-  //this function will be called after each number output to calculate all operations/numbers passed
-  // the calculated amount will also be displayed on screen
+  const operationButtonClick = (props) =>  {
 
-  // const displayOutput = (props) => {
-  //   for (var i = 0; i <= myArray.length; i++) {}
-  // };
-
-  const operationButtonClick = (value) => () => {
-    const getNumber = (value) => {
-      //  const input
-    };
-    if (props.onOperationButtonClick) {
-      props.onOperationButtonClick(value);
-    }
+    if (props !== "=") {
     myArray.push(props);
+    setOperator(props);}
+    let lastElement = myArray[myArray.length -1];
+    // let operatorArray = ['+','-','/','*','.','AC','+/-','%'];
+    // let numberArray = ['0','1','2','3','4','5','6','7','8','9'];
+
+    console.log("Array ", myArray);
+
+    let inputString = myArray.join(''); 
+    console.log(inputString);
+
+    
+    if (props === "="){
+      console.log("yes im in = block")
+      
+      // console.log("inputString" ,inputString);
+      if (inputString.includes("+/-") || inputString.includes("%") ) {
+        console.log("We in the block");
+        console.log("props in = block", props);
+        if (inputString.includes("+/-")){
+          console.log("this my array sis ", myArray)
+          console.log("number before last operator", myArray[myArray.length -2])
+          let lastNumber = myArray[myArray.length -2];
+          console.log("lastNumber", lastNumber);
+          let outputN = lastNumber * -1;
+          console.log("outputN :", outputN);
+          setMyArray(outputN);
+        }
+        if (inputString.includes("%") ){
+          console.log("at %", myArray[myArray.length -2])
+          let lastNumber = myArray[0];
+          let outputN = lastNumber/100;
+          console.log(outputN);
+          setMyArray(outputN);
+        };
+      }
+      else{
+        setMyArray([eval(inputString)]);
+      }
+    }
+    
     if (props === "AC") {
       myArray.length = 0;
+      setOutput("0");
+      setNumber("0");
+      setOperator("");
       console.log("ac should clean");
+      }
+
     }
-
-    console.log("Array - operator", myArray);
-
-    // if ( === "AC") {
-    //   myArray.length = 0;
-    //   console.log("ac should clean");
-    // }
-
-    // setOperation(props);
-    // myArray.push(props);
-    //   switch (props) {
-    //     case "AC":
-    //       myArray.length = 0;
-    //       break;
-    //     case "%":
-    //       if (myArray[myArray.length - 1] === isNumber) {
-    //         return myArray[myArray.length - 1] / 100;
-    //       } else return "Error";
-    //     case "+/-":
-    //       if (
-    //         myArray[myArray.length - 1] === isNumber &&
-    //         myArray[myArray.length - 1] <= 0
-    //       ) {
-    //         return myArray[myArray.length - 1] * -1;
-    //       }
-    //       if (
-    //         myArray[myArray.length - 1] === isNumber &&
-    //         myArray[myArray.length - 1] >= 0
-    //       ) {
-    //         return myArray[myArray.length - 1] * -1;
-    //       } else return "Error";
-    //     case "=":
-    //       break;
-    //     default:
-    //       return;
-    //   }
-  };
-
+    
   return (
     <>
+    <div className={classes.inputField}>
+   <div>
+      {operator}
+      {number}
+   </div>
+      {/* {myArray.join('')} */}
+      {output}
+    </div>
       <div className={classes.BOXY}>
         <div className="">
           <Button
             variant="contained"
             className={classes.topDark}
             value="AC"
-            onClick={operationButtonClick("AC")}
+            // onClick={operationButtonClick("AC")}
+            onClick={operationButtonClick.bind(this, "AC")}
           >
             AC
           </Button>
           <Button
             variant="contained"
             className={classes.topDark}
-            onClick={operationButtonClick("+/-")}
+            onClick={operationButtonClick.bind(this, "+/-")}
           >
             +/-
           </Button>
           <Button
             variant="contained"
             className={classes.topDark}
-            onClick={operationButtonClick("%")}
+            onClick={operationButtonClick.bind(this, "%")}
           >
             %
           </Button>
           <Button
             variant="contained"
             className={classes.sideOperations}
-            onClick={operationButtonClick("/")}
+            onClick={operationButtonClick.bind(this, "/")}
           >
             &#247;
           </Button>
         </div>
         <div className={classes.buttonRow}>
-          <Button variant="contained" onClick={numberButtonClick("7")}>
+          <Button variant="contained" onClick={numberButtonClick.bind(this, "7")}>
             7
           </Button>
-          <Button variant="contained" onClick={numberButtonClick("8")}>
+          <Button variant="contained" onClick={numberButtonClick.bind(this, "8")}>
             8
           </Button>
-          <Button variant="contained" onClick={numberButtonClick("9")}>
+          <Button variant="contained" onClick={numberButtonClick.bind(this, "9")}>
             9
           </Button>
           <Button
             variant="contained"
-            onClick={operationButtonClick("*")}
+            onClick={operationButtonClick.bind(this, "*")}
             className={classes.sideOperations}
           >
             &#215;
           </Button>
         </div>
         <div className={classes.buttonRow}>
-          <Button variant="contained" onClick={numberButtonClick("4")}>
+          <Button variant="contained" onClick={numberButtonClick.bind(this, "4")}>
             4
           </Button>
-          <Button variant="contained" onClick={numberButtonClick("5")}>
+          <Button variant="contained" onClick={numberButtonClick.bind(this, "5")}>
             5
           </Button>
-          <Button variant="contained" onClick={numberButtonClick("6")}>
+          <Button variant="contained" onClick={numberButtonClick.bind(this, "6")}>
             6
           </Button>
           <Button
             variant="contained"
-            onClick={operationButtonClick("-")}
+            onClick={operationButtonClick.bind(this, "-")}
             className={classes.sideOperations}
           >
             -
           </Button>
         </div>
         <div className={classes.buttonRow}>
-          <Button variant="contained" onClick={numberButtonClick("1")}>
+          <Button variant="contained" onClick={numberButtonClick.bind(this, "1")}>
             1
           </Button>
-          <Button variant="contained" onClick={numberButtonClick("2")}>
+          <Button variant="contained" onClick={numberButtonClick.bind(this, "2")}>
             2
           </Button>
-          <Button variant="contained" onClick={numberButtonClick("3")}>
+          <Button variant="contained" onClick={numberButtonClick.bind(this, "3")}>
             3
           </Button>
           <Button
             variant="contained"
-            onClick={operationButtonClick("+")}
+            onClick={operationButtonClick.bind(this, "+")}
             className={classes.sideOperations}
           >
             +
@@ -211,21 +221,21 @@ const Keypad = (props) => {
           <Button
             variant="contained"
             className={classes.zero}
-            onClick={numberButtonClick("0")}
+            onClick={numberButtonClick.bind(this, "0")}
           >
             0
           </Button>
           <Button
             variant="contained"
             color="#bfbfbf"
-            onClick={operationButtonClick(".")}
+            onClick={operationButtonClick.bind(this, ".")}
           >
             .
           </Button>
           <Button
             variant="contained"
             className={classes.sideOperations}
-            onClick={operationButtonClick("=")}
+            onClick={operationButtonClick.bind(this, "=")}
           >
             =
           </Button>
@@ -233,47 +243,8 @@ const Keypad = (props) => {
       </div>
     </>
   );
-};
+ }
 
-export default Keypad;
 
-/*
-[vals, setVals] = useState([null, null])
-
-[operandApplied, setOperandApplied] = useState(null):
-[arr , setArr] = useState([])
-[valToFill, setValToFill] = useState(0);
-
-onOperandButtonClick(operand){
-    if (vals[0] === null){
-        error
-    }
-    else if (vals[1] === null){
-        
-        setOperandApllied(operand)
-        // val2 starts getting populated
-        setValsToFill(1);
-        setArr([]);
-    }
-    else if (operand !== null){
-        let result = eval(vals[0] + operandApplied + vals[1])
-        setVals([result, null]);
-        setValsToFill(1);
-        setArr([]);
-        setOperandApplied(operand);
-
-        // vals[0] + operand
-    }
-    else{
-        error
-    }
-}
-
-onNumberButtonClick(number){
-    arr.append(number); [3, 5]
-    let oldVals = vals; [ 30 , 3] and operandApplied = '*';
-
-    oldVals[valToFill] = float("".join(arr)); [30 , 35] | 
-    setVals(oldVals);
-}
-*/
+  export default Keypad;
+  

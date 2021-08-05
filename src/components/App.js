@@ -1,6 +1,6 @@
 //import "./App.css";
 import React, { useState } from "react";
-import DisplayScreen from "./DisplayScreen";
+//import DisplayScreen from "./DisplayScreen";
 import Keypad from "./Keypad";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
@@ -28,7 +28,6 @@ const App = () => {
   };
   return (
     <div className={classes.OuterContainer}>
-      <DisplayScreen currentOperator={operator} currentNumber={number} />
       <Keypad
         onOperationButtonClick={operationButtonClick}
         onNumberButtonClick={numberButtonClick}
