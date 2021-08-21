@@ -69,41 +69,54 @@ const useStyles = makeStyles(() =>
   const operationButtonClick = (props) =>  {
 
     if (props !== "=") {
-    myArray.push(props);
-    setOperator(props);}
     let lastElement = myArray[myArray.length -1];
-    // let operatorArray = ['+','-','/','*','.','AC','+/-','%'];
-    // let numberArray = ['0','1','2','3','4','5','6','7','8','9'];
+    if (singleOperators.includes(lastElement) || doubleOperators.includes(lastElement) ){
+      myArray[myArray.length -1] = props;
+      setMyArray(myArray); 
+    }
+    myArray.push(props);
+    setOperator(props);
+  }
+   
 
     console.log("Array ", myArray);
 
     let inputString = myArray.join(''); 
-    console.log(inputString);
+
+    console.log("inputString", inputString);
 
     
     if (props === "="){
       console.log("yes im in = block")
-      
+      console.log("inputString in =", inputString);
       // console.log("inputString" ,inputString);
       if (inputString.includes("+/-") || inputString.includes("%") ) {
         console.log("We in the block");
         console.log("props in = block", props);
+        
         if (inputString.includes("+/-")){
           console.log("this my array sis ", myArray)
           console.log("number before last operator", myArray[myArray.length -2])
-          let lastNumber = myArray[myArray.length -2];
+          var myNumberString =  inputString.split('+/-');
+          console.log("mynumberstring", myNumberString);
+          let lastNumber = myNumberString[0];
           console.log("lastNumber", lastNumber);
           let outputN = lastNumber * -1;
           console.log("outputN :", outputN);
-          setMyArray(outputN);
+          setOutput(outputN);
+          setMyArray([outputN]);
+          console.log(myArray);
         }
         if (inputString.includes("%") ){
           console.log("at %", myArray[myArray.length -2])
-          let lastNumber = myArray[0];
+       // we have a string like 123%= so we want to split by 
+          var myNumberString =  inputString.split('%');
+          console.log("mynumberstring", myNumberString);
+          let lastNumber = myNumberString[0];
           let outputN = lastNumber/100;
           console.log(outputN);
-          setMyArray(outputN);
-        };
+          setMyArray([outputN]);
+        }
       }
       else{
         setMyArray([eval(inputString)]);
@@ -127,8 +140,8 @@ const useStyles = makeStyles(() =>
       {operator}
       {number}
    </div>
-      {/* {myArray.join('')} */}
-      {output}
+      {myArray.join('')}
+      {/* {output} */}
     </div>
       <div className={classes.BOXY}>
         <div className="">
