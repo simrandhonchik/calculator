@@ -53,9 +53,7 @@ const useStyles = makeStyles(() =>
   let doubleOperators = ['+','-','*','/'];
   //to check if its a number
 
-  // let isNumber = function isNumber(value) {
-  //   return typeof value === "number" && isFinite(value);
-  // };
+
 
   //function to process number button click , it adds the number to array
   const numberButtonClick = (props) =>  {
@@ -141,9 +139,8 @@ const useStyles = makeStyles(() =>
       {number}
    </div>
       {myArray.join('')}
-      {/* {output} */}
     </div>
-      <div className={classes.BOXY}>
+      <div className={classes.BOXY} data-testid="Keyboard">
         <div className="">
           <Button
             variant="contained"
